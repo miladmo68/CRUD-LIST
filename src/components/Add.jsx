@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 
 const Add = ({ onSubmit }) => {
-  //   const [addId, setAddId] = useState("");
   const [addText, setAddText] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!addText.trim()) return;
-    // console.log(addText);
+
     onSubmit(addText);
     setAddText("");
   };
@@ -36,6 +35,7 @@ const Add = ({ onSubmit }) => {
 
       <button
         type="submit"
+        disabled={!addText.trim()}
         className="
           px-5 py-2
           rounded-xl
@@ -44,6 +44,7 @@ const Add = ({ onSubmit }) => {
           font-medium
           hover:bg-indigo-700
           transition
+          disabled:opacity-50
         "
       >
         Add

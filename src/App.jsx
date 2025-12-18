@@ -11,23 +11,43 @@ function App() {
   ];
 
   const [items, setItems] = useState(initialItems);
+
+  // Edit states
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
+  // CREATE
   const handleAddSubmit = (text) => {
-    // console.log("new Item Added: " + text);
     setItems((prev) => [{ id: Date.now(), text }, ...prev]);
   };
 
+  // DELETE
   const deleteHandler = (id) => {
-    setItems(items.filter((prev) => prev.id !== id));
-    // console.log(id);
+    setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
+  // EDIT (start)
   const editHandler = (item) => {
-    console.log(item);
     setEditingId(item.id);
     setEditingText(item.text);
+  };
+
+  // SAVE (update)
+  const saveHandler = (id) => {
+    if (!editingText.trim()) return;
+
+    setItems((prev) =>
+      prev.map((it) => (it.id === id ? { ...it, text: editingText } : it))
+    );
+
+    setEditingId(null);
+    setEditingText("");
+  };
+
+  // CANCEL
+  const cancelHandler = () => {
+    setEditingId(null);
+    setEditingText("");
   };
 
   return (
@@ -46,22 +66,56 @@ function App() {
                 key={item.id}
                 className="flex items-center justify-between bg-indigo-50 hover:bg-indigo-100 transition rounded-xl px-4 py-2"
               >
-                <span className="text-gray-800 font-medium">{item.text}</span>
+                {/* TEXT / INPUT */}
+                {editingId === item.id ? (
+                  <input
+                    value={editingText}
+                    onChange={(e) => setEditingText(e.target.value)}
+                    className="flex-1 mr-2 px-3 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  />
+                ) : (
+                  <span className="text-gray-800 font-medium">{item.text}</span>
+                )}
 
+                {/* BUTTONS */}
                 <div className="flex gap-2">
-                  <button
-                    className="text-xs px-3 py-1 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition"
-                    onClick={() => editHandler(item)}
-                  >
-                    Edit
-                  </button>
+                  {editingId === item.id ? (
+                    <>
+                      <button
+                        type="button"
+                        className="text-xs px-3 py-1 rounded-lg bg-green-100 text-green-700 hover:bg-green-200 transition"
+                        onClick={() => saveHandler(item.id)}
+                      >
+                        Save
+                      </button>
 
-                  <button
-                    className="text-xs px-3 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
-                    onClick={() => deleteHandler(item.id)}
-                  >
-                    Delete
-                  </button>
+                      <button
+                        type="button"
+                        className="text-xs px-3 py-1 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
+                        onClick={cancelHandler}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className="text-xs px-3 py-1 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition"
+                        onClick={() => editHandler(item)}
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        className="text-xs px-3 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
+                        onClick={() => deleteHandler(item.id)}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </div>
               </li>
             ))}
