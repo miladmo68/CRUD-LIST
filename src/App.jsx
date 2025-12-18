@@ -71,6 +71,15 @@ function App() {
                   <input
                     value={editingText}
                     onChange={(e) => setEditingText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        saveHandler(item.id);
+                      }
+                      if (e.key === "Escape") {
+                        cancelHandler();
+                      }
+                    }}
+                    autoFocus
                     className="flex-1 mr-2 px-3 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                   />
                 ) : (
