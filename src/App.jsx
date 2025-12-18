@@ -12,16 +12,24 @@ function App() {
 
   const [items, setItems] = useState(initialItems);
 
+  const handleAddSubmit = (text) => {
+    console.log("new Item Added: " + text);
+    setItems((prev) => [{ id: Date.now(), text }, ...prev]);
+  };
+
+  const deleteHandler = (id) => {
+    setItems(items.filter((item) => item.id !== id));
+    // console.log(id);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 to-indigo-100 flex items-center justify-center">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 space-y-6">
-        {/* 👆 space-y فاصله‌ها رو اتومات درست می‌کنه */}
-
         <h1 className="text-3xl font-bold text-center text-indigo-600">
           CRUD List
         </h1>
 
-        <Add />
+        <Add onSubmit={handleAddSubmit} />
 
         {items.length > 0 ? (
           <ol className="space-y-3">
@@ -37,7 +45,10 @@ function App() {
                     Edit
                   </button>
 
-                  <button className="text-xs px-3 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition">
+                  <button
+                    className="text-xs px-3 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
+                    onClick={() => deleteHandler(item.id)}
+                  >
                     Delete
                   </button>
                 </div>

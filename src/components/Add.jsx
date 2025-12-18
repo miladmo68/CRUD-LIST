@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Add = () => {
+const Add = ({ onSubmit }) => {
+  //   const [addId, setAddId] = useState("");
+  const [addText, setAddText] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!addText.trim()) return;
+    // console.log(addText);
+    onSubmit(addText);
+    setAddText("");
+  };
+
   return (
-    <div className="flex gap-3">
+    <form className="flex gap-3" onSubmit={handleSubmit}>
       <input
         type="text"
+        value={addText}
+        onChange={(e) => setAddText(e.target.value)}
         placeholder="Add new item..."
         className="
           flex-1
@@ -22,6 +35,7 @@ const Add = () => {
       />
 
       <button
+        type="submit"
         className="
           px-5 py-2
           rounded-xl
@@ -34,7 +48,7 @@ const Add = () => {
       >
         Add
       </button>
-    </div>
+    </form>
   );
 };
 
