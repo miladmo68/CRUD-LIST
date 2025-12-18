@@ -11,15 +11,23 @@ function App() {
   ];
 
   const [items, setItems] = useState(initialItems);
+  const [editingId, setEditingId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   const handleAddSubmit = (text) => {
-    console.log("new Item Added: " + text);
+    // console.log("new Item Added: " + text);
     setItems((prev) => [{ id: Date.now(), text }, ...prev]);
   };
 
   const deleteHandler = (id) => {
-    setItems(items.filter((item) => item.id !== id));
+    setItems(items.filter((prev) => prev.id !== id));
     // console.log(id);
+  };
+
+  const editHandler = (item) => {
+    console.log(item);
+    setEditingId(item.id);
+    setEditingText(item.text);
   };
 
   return (
@@ -41,7 +49,10 @@ function App() {
                 <span className="text-gray-800 font-medium">{item.text}</span>
 
                 <div className="flex gap-2">
-                  <button className="text-xs px-3 py-1 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition">
+                  <button
+                    className="text-xs px-3 py-1 rounded-lg bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition"
+                    onClick={() => editHandler(item)}
+                  >
                     Edit
                   </button>
 
